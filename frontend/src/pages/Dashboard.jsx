@@ -81,10 +81,10 @@ function Dashboard() {
   ];
 
   const trustMetrics = [
-    { score: 94, label: "Data Authenticity", description: "All transactions verified through blockchain ledger" },
-    { score: 87, label: "Transparency Score", description: "Public accessibility and documentation completeness" },
-    { score: 91, label: "Audit Compliance", description: "Adherence to financial reporting standards" },
-    { score: 96, label: "Real-time Accuracy", description: "Data freshness and update frequency" },
+    { score: 94, label: "Data Authenticity", description: "All transactions are logged securely with internal verification protocols." },
+    { score: 87, label: "Transparency Score", description: "Public accessibility and documentation completeness." },
+    { score: 91, label: "Audit Compliance", description: "Adherence to financial reporting standards." },
+    { score: 96, label: "Real-time Accuracy", description: "Data freshness and update frequency." },
   ];
 
   const spentPercentage = (liveData.totalSpent / liveData.totalBudget) * 100;

@@ -7,6 +7,7 @@ function Layout({ children }) {
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/dashboard", label: "Dashboard" },
+    { path: "/budget-flow", label: "Budget Flow" },
   ];
 
   return (
