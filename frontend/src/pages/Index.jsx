@@ -11,7 +11,7 @@ function Index() {
             Institutional <span className="bg-gradient-to-r bg-brand-medium bg-clip-text text-transparent">Fund</span> Tracker
           </h1>
           <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
-            Bringing clarity and trust to institutional fund management. Track every Rupee from budget allocation to final expenditure with complete transparency.
+            Bringing clarity and trust to institutional fund management. Track every Rupee or Dollar from budget allocation to final expenditure with complete transparency.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

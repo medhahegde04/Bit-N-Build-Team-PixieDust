@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 
 function BudgetCard({ title, amount, allocated, spent, department, status, lastUpdated }) {
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [submittedFeedback, setSubmittedFeedback] = useState([]);
+
   const getStatusColor = (s) => {
     switch (s) {
       case "on-track":
@@ -29,6 +33,14 @@ function BudgetCard({ title, amount, allocated, spent, department, status, lastU
 
   const spentPercentage = allocated ? (spent / allocated) * 100 : 0;
   const remainingPercentage = 100 - spentPercentage;
+
+  const handleSubmitFeedback = () => {
+    if (feedback.trim() !== "") {
+      setSubmittedFeedback([...submittedFeedback, feedback.trim()]);
+      setFeedback("");
+      setShowFeedback(false);
+    }
+  };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
@@ -70,9 +82,44 @@ function BudgetCard({ title, amount, allocated, spent, department, status, lastU
           <span>{remainingPercentage.toFixed(1)}% remaining</span>
         </div>
 
-        <div className="pt-2 border-t border-slate-100">
+        <div className="pt-2 border-t border-slate-100 flex justify-between items-center">
           <p className="text-xs text-slate-500">Last updated: {lastUpdated}</p>
+          <button
+            onClick={() => setShowFeedback(!showFeedback)}
+            className="text-xs text-blue-600 hover:underline"
+          >
+            {showFeedback ? "Cancel" : "Leave Feedback"}
+          </button>
         </div>
+
+        {showFeedback && (
+          <div className="mt-2 space-y-2">
+            <textarea
+              className="w-full border border-slate-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              rows={3}
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              placeholder="Write your feedback..."
+            />
+            <button
+              onClick={handleSubmitFeedback}
+              className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
+            >
+              Submit
+            </button>
+          </div>
+        )}
+
+        {submittedFeedback.length > 0 && (
+          <div className="mt-2 text-sm text-slate-700">
+            <strong>Feedback:</strong>
+            <ul className="list-disc list-inside space-y-1">
+              {submittedFeedback.map((f, i) => (
+                <li key={i}>{f}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

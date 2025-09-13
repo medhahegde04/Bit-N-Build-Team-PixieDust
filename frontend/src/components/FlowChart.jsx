@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 
-function FlowChart({ data }) {
+function FlowChart({ data, currency = "INR", conversionRate = 0.012 }) {
   const [selectedNode, setSelectedNode] = useState(null);
+
+  const formatCurrency = (value) => {
+    if (!value) return "";
+    if (currency === "USD") {
+      return `$${(value * conversionRate).toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
+    }
+    return `₹${Number(value).toLocaleString("en-IN")}`;
+  };
 
   const renderNode = (node) => {
     const isSelected = selectedNode?.id === node.id;
@@ -22,7 +30,7 @@ function FlowChart({ data }) {
             {node.label || node.name}
           </h4>
           <p className="text-sm text-slate-600">
-            {node.amount ? `₹${Number(node.amount).toLocaleString("en-IN")}` : ""}
+            {node.amount ? formatCurrency(node.amount) : ""}
           </p>
           <span className="text-xs text-slate-500 capitalize">{node.type || ""}</span>
 
@@ -71,7 +79,7 @@ function FlowChart({ data }) {
           )}
           {selectedNode.amount && (
             <p className="text-sm text-blue-700">
-              <strong>Amount:</strong> ₹{Number(selectedNode.amount).toLocaleString("en-IN")}
+              <strong>Amount:</strong> {formatCurrency(selectedNode.amount)}
             </p>
           )}
           {selectedNode.type && (

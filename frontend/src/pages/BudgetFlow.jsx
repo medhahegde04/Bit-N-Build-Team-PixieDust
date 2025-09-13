@@ -6,8 +6,16 @@ export default function BudgetFlow() {
   const [selectedView, setSelectedView] = useState("overview");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [visualizationType, setVisualizationType] = useState("tree");
+  const [currency, setCurrency] = useState("INR"); 
 
-  const formatCurrency = (value) => `₹${value.toLocaleString("en-IN")}`;
+  const conversionRate = 0.012;
+
+  const formatCurrency = (value) => {
+    if (currency === "USD") {
+      return `$${(value * conversionRate).toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
+    }
+    return `₹${value.toLocaleString("en-IN")}`;
+  };
 
   const flowData = {
     id: "total-budget",
@@ -189,12 +197,22 @@ export default function BudgetFlow() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Budget Flow Visualization</h1>
-          <p className="text-slate-600">Interactive visualization showing fund flow from budget to departments, projects, and vendors.w</p>
+          <p className="text-slate-600">Interactive visualization showing fund flow from budget to departments, projects, and vendors.</p>
         </div>
 
         {/* Controls */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 mb-8">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-4">
+            
+            {/* Currency Switch */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Currency</label>
+              <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-brand-medium focus:border-brand-navy">
+                <option value="INR">INR</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
+
             {/* View Type */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">View Type</label>
@@ -226,9 +244,9 @@ export default function BudgetFlow() {
         {/* Visualization */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 mb-8">
           {visualizationType === "tree" ? (
-            <FlowChart data={getProcessedData()} />
+            <FlowChart data={getProcessedData()} currency={currency} conversionRate={conversionRate} />
           ) : (
-            <LineGraph data={getProcessedData()} />
+            <LineGraph data={getProcessedData()} currency={currency} conversionRate={conversionRate} />
           )}
         </div>
       </div>

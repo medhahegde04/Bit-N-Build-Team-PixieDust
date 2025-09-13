@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32" fill="currentColor">
+  <!-- Large sparkle -->
+  <polygon points="32,2 36,24 58,32 36,40 32,62 28,40 6,32 28,24"></polygon>
+  <!-- Small sparkles -->
+  <polygon points="12,12 14,20 22,22 14,24 12,32 10,24 2,22 10,20"></polygon>
+  <polygon points="52,8 54,12 58,14 54,16 52,20 50,16 46,14 50,12"></polygon>
+  <polygon points="44,44 46,48 50,50 46,52 44,56 42,52 38,50 42,48"></polygon>
+</svg>
