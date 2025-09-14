@@ -1,35 +1,11 @@
-const mongoose = require('mongoose');
-
+import mongoose from "mongoose";
 
 const transactionSchema = new mongoose.Schema({
-
-  category: {
-    type: String,
-    required: true,
-  },
-
-  subCategory: {
-    type: String,
-    required: true,
-  },
-
-  amount: {
-    type: Number,
-    required: true,
-  },
-
-  description: {
-    type: String,
-    required: true,
-  },
-
-  date: {
-    type: Date,
-    default: Date.now,
-  }
+  type: String,
+  amount: Number,
+  description: String,
+  department: String,
+  time: String
 });
 
-
-const Transaction = mongoose.model('Transaction', transactionSchema);
-
-module.exports = Transaction;
+export default mongoose.model("Transaction", transactionSchema);

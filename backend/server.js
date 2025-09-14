@@ -1,106 +1,26 @@
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
 
-require('dotenv').config();
+import budgetRoutes from "./routes/budgetRoutes.js";
+import transactionRoutes from "./routes/transactionRoutes.js";
+import trustRoutes from "./routes/trustRoutes.js";
 
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-
-
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/budgets", budgetRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/trust", trustRoutes);
 
-
-mongoose.connect(
-  process.env.MONGODB_URI,
-  
-  {
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  }
-)
-.then(() => console.log(' Connected to MongoDB Atlas'))
-.catch((err) => console.error(' MongoDB connection error:', err));
+}).then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
 
-
-
-const transactionSchema = new mongoose.Schema({
-  title: String,
-  amount: Number,
-  category: String,
-  subcategory: String,
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-});
-
-
-const Transaction = mongoose.model('Transaction', transactionSchema, 'project');
-
-
-
-app.post('/api/add-transaction', async (req, res) => {
-  try {
-    const newTransaction = new Transaction(req.body);
-    await newTransaction.save();
-    res.status(201).json({ message: 'Transaction added', data: newTransaction });
-  } catch (error) {
-    res.status(500).json({ message: 'Error saving transaction', error });
-  }
-});
-
-
-app.get('/api/data', async (req, res) => {
-  try {
-    const transactions = await Transaction.find();
-    res.status(200).json(transactions);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching transactions', error });
-  }
-});
-
-
-app.get('/api/aggregated-data', async (req, res) => {
-  try {
-    const transactions = await Transaction.find();
-
-    const grouped = {};
-
-    transactions.forEach(txn => {
-      const cat = txn.category;
-      const sub = txn.subcategory;
-
-      if (!grouped[cat]) grouped[cat] = {};
-      if (!grouped[cat][sub]) grouped[cat][sub] = 0;
-
-      grouped[cat][sub] += txn.amount;
-    });
-
-    const result = {
-      name: "All Transactions",
-      children: Object.entries(grouped).map(([category, subs]) => ({
-        name: category,
-        children: Object.entries(subs).map(([sub, value]) => ({
-          name: sub,
-          value
-        }))
-      }))
-    };
-
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({ message: 'Error aggregating data', error });
-  }
-});
-
-
-
-app.listen(PORT, () => {
-  console.log(` Server running on http://localhost:${PORT}`);
-});
+app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));

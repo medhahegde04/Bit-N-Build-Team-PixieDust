@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 
-function BudgetCard({ title, amount, allocated, spent, department, status, lastUpdated }) {
+function BudgetCard({ title, amount, allocated, spent, department, status, lastUpdated, currency, conversionRate }) {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [submittedFeedback, setSubmittedFeedback] = useState([]);
+
+  const formatCurrency = (value) => {
+    if (currency === "INR") {
+      return `₹${Number(value).toLocaleString("en-IN")}`;
+    } else {
+      return `$${(Number(value) * conversionRate).toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+    }
+  };
 
   const getStatusColor = (s) => {
     switch (s) {
@@ -57,17 +65,17 @@ function BudgetCard({ title, amount, allocated, spent, department, status, lastU
       <div className="space-y-3">
         <div className="flex justify-between items-center">
           <span className="text-sm text-slate-600">Total Budget</span>
-          <span className="font-semibold text-slate-900">₹{Number(amount).toLocaleString("en-IN")}</span>
+          <span className="font-semibold text-slate-900">{formatCurrency(amount)}</span>
         </div>
 
         <div className="flex justify-between items-center">
           <span className="text-sm text-slate-600">Allocated</span>
-          <span className="font-semibold text-blue-600">₹{Number(allocated).toLocaleString("en-IN")}</span>
+          <span className="font-semibold text-blue-600">{formatCurrency(allocated)}</span>
         </div>
 
         <div className="flex justify-between items-center">
           <span className="text-sm text-slate-600">Spent</span>
-          <span className="font-semibold text-slate-900">₹{Number(spent).toLocaleString("en-IN")}</span>
+          <span className="font-semibold text-slate-900">{formatCurrency(spent)}</span>
         </div>
 
         <div className="w-full bg-slate-200 rounded-full h-2">
